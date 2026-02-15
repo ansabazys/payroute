@@ -1,0 +1,10 @@
+{
+  "name": "PayRoute",
+  "short_name": "PayRoute",
+  "description": "Installment tracking app",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#7c3aed",
+  "orientation": "portrait"
+}
