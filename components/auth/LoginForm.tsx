@@ -1,5 +1,7 @@
 "use client";
+import { Eye, EyeClosed, LoaderCircle } from "lucide-react";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function LoginForm() {
@@ -8,6 +10,11 @@ export default function LoginForm() {
     email: "",
     password: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -15,15 +22,19 @@ export default function LoginForm() {
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
+    setLoading(true);
+    setError(null);
 
-    
     const res = await signIn("credentials", {
       ...formData,
-      redirect: true,
-      callbackUrl: "/dashboard",
+      redirect: false,
     });
 
-    console.log(res)
+    if (res?.error) {
+      setError(res.error);
+    } else {
+      router.push("/dashboard");
+    }
   };
 
   return (
@@ -35,16 +46,26 @@ export default function LoginForm() {
         name="username"
         onChange={handleChange}
       />
-      <input
-        type="password"
-        name="password"
-        className=" outline-0 px-3 py-4 bg-neutral-100 rounded-xl w-full "
-        placeholder="password"
-        onChange={handleChange}
-      />
+      <div className="flex justify-between  px-3 py-4 bg-neutral-100 rounded-xl w-full ">
+        <input
+          type={showPassword ? "text" : "password"}
+          name="password"
+          placeholder="password"
+          className="outline-0"
+          onChange={handleChange}
+        />
+        {showPassword ? (
+          <Eye color="gray" onClick={() => setShowPassword((prev) => !prev)} />
+        ) : (
+          <EyeClosed
+            color="gray"
+            onClick={() => setShowPassword((prev) => !prev)}
+          />
+        )}
+      </div>
 
-      <button className="w-full p-4 bg-neutral-900 text-white rounded-xl">
-        Login
+      <button className="w-full p-4 flex items-center justify-center bg-neutral-900 text-white rounded-xl">
+        {loading ? <LoaderCircle /> : <span>Login</span>}
       </button>
     </form>
   );
