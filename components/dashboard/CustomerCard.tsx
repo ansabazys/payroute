@@ -1,6 +1,7 @@
 import { IndianRupee, MapPin, Phone } from "lucide-react";
 
 export default function CustomerCard({ name, amount, status }: any) {
+  
   return (
     <div className="bg-white rounded-2xl p-4 space-y-1 border border-neutral-100">
       <div className="flex justify-between">

@@ -9,7 +9,7 @@ export default function BottomNav() {
 
   return (
     <div className="fixed bottom-0 left-0 h-20 w-full flex justify-center">
-      <div className="flex w-full  max-w-50 justify-between px-5 backdrop-blur-lg rounded-2xl mb-5 items-center py-4">
+      <div className="flex w-full  max-w-50 justify-between px-5 backdrop-blur-lg border border-neutral-100 rounded-2xl mb-5 items-center py-4">
         {/* Dashboard */}
         <Link href="/dashboard" className="flex flex-col items-center ">
           {/* <LayoutDashboard
