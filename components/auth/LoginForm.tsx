@@ -7,7 +7,6 @@ import { useState } from "react";
 export default function LoginForm() {
   const [formData, setFormData] = useState({
     username: "",
-    email: "",
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -25,10 +24,17 @@ export default function LoginForm() {
     setLoading(true);
     setError(null);
 
+    if (!formData.username && !formData.password) {
+      setLoading(false);
+      return setError("Required all fields.");
+    }
+
     const res = await signIn("credentials", {
       ...formData,
       redirect: false,
     });
+
+    setLoading(false);
 
     if (res?.error) {
       setError(res.error);
@@ -64,8 +70,14 @@ export default function LoginForm() {
         )}
       </div>
 
+      <p className="text-xs px-3 text-red-400">{error}</p>
+
       <button className="w-full p-4 flex items-center justify-center bg-neutral-900 text-white rounded-xl">
-        {loading ? <LoaderCircle /> : <span>Login</span>}
+        {loading ? (
+          <LoaderCircle className="animate-spin" />
+        ) : (
+          <span>Login</span>
+        )}
       </button>
     </form>
   );
