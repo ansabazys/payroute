@@ -7,6 +7,8 @@ const FILTERS = [
   { label: "High price", value: "high" },
   { label: "Low price", value: "low" },
   { label: "Nearest Due Date", value: "due" },
+  { label: "Due today", value: "today" },
+  { label: "Overdue", value: "overdue" },
 ];
 
 export default function SearchBar({

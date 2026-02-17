@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
     if (!name || !totalAmount || !nextDueDate) {
       return NextResponse.json(
         { error: "Missing required fields" },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
       totalAmount,
       paidAmount: paidAmount || 0,
       pendingAmount,
-      nextDueDate,
+      nextDueDate: new Date(nextDueDate),
       location,
     });
 
@@ -55,56 +55,91 @@ export async function POST(req: NextRequest) {
     console.error("CUSTOMER_POST_ERROR:", error);
     return NextResponse.json(
       { error: "Failed to create customer" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
 
+
 export async function GET(req: NextRequest) {
   try {
-    // 1️⃣ Auth
     const session = await getServerSession(authOptions);
 
     if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // 2️⃣ Connect DB
     await connectDB();
 
-    // 3️⃣ Get query params
     const { searchParams } = new URL(req.url);
 
     const q = searchParams.get("q");
     const sort = searchParams.get("sort");
 
-    // 4️⃣ Build filter
     const filter: any = {
       ownerId: session.user.id,
     };
 
+    // 🔍 Search
     if (q) {
       filter.name = { $regex: q, $options: "i" };
     }
 
-    // 5️⃣ Sorting
+    // 📅 TODAY FILTER
+    if (sort === "today") {
+      const today = new Date();
+
+      const start = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate(),
+        0, 0, 0, 0
+      );
+
+      const end = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate(),
+        23, 59, 59, 999
+      );
+
+      filter.nextDueDate = {
+        $gte: start,
+        $lte: end,
+      };
+
+      filter.pendingAmount = { $gt: 0 };
+    }
+
+    // 📅 OVERDUE FILTER
+    if (sort === "overdue") {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      filter.nextDueDate = { $lt: today };
+      filter.pendingAmount = { $gt: 0 };
+    }
+
+    // 📊 SORT
     let sortOption: any = { createdAt: -1 };
 
     if (sort === "high") sortOption = { pendingAmount: -1 };
     if (sort === "low") sortOption = { pendingAmount: 1 };
     if (sort === "due") sortOption = { nextDueDate: 1 };
 
-    // 6️⃣ Fetch customers
-    const customers = await Customer.find(filter).sort(sortOption).lean();
+    const customers = await Customer.find(filter)
+      .sort(sortOption)
+      .lean();
 
-    // 7️⃣ Return
     return NextResponse.json(customers);
+
   } catch (error) {
     console.error("GET_CUSTOMERS_ERROR:", error);
 
     return NextResponse.json(
       { error: "Failed to fetch customers" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
+
