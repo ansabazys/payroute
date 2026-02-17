@@ -62,20 +62,42 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
   try {
+    // 1️⃣ Auth
     const session = await getServerSession(authOptions);
-
-    console.log(session)
 
     if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    // 2️⃣ Connect DB
     await connectDB();
 
-    const customers = await Customer.find({
-      ownerId: session.user.id,
-    }).sort({ createdAt: -1 });
+    // 3️⃣ Get query params
+    const { searchParams } = new URL(req.url);
 
+    const q = searchParams.get("q");
+    const sort = searchParams.get("sort");
+
+    // 4️⃣ Build filter
+    const filter: any = {
+      ownerId: session.user.id,
+    };
+
+    if (q) {
+      filter.name = { $regex: q, $options: "i" };
+    }
+
+    // 5️⃣ Sorting
+    let sortOption: any = { createdAt: -1 };
+
+    if (sort === "high") sortOption = { pendingAmount: -1 };
+    if (sort === "low") sortOption = { pendingAmount: 1 };
+    if (sort === "due") sortOption = { nextDueDate: 1 };
+
+    // 6️⃣ Fetch customers
+    const customers = await Customer.find(filter).sort(sortOption).lean();
+
+    // 7️⃣ Return
     return NextResponse.json(customers);
   } catch (error) {
     console.error("GET_CUSTOMERS_ERROR:", error);

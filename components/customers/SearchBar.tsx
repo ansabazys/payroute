@@ -1,8 +1,7 @@
 "use client";
 
 import { Funnel, X } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
 const FILTERS = [
   { label: "High price", value: "high" },
@@ -10,58 +9,29 @@ const FILTERS = [
   { label: "Nearest Due Date", value: "due" },
 ];
 
-export default function SearchBar() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const currentSort = searchParams.get("sort") || "";
-  const initialQ = searchParams.get("q") || "";
-
-  const [value, setValue] = useState(initialQ);
+export default function SearchBar({
+  value,
+  onSearch,
+  onSort,
+  currentSort,
+}: any) {
+  const [input, setInput] = useState(value);
   const [isOpen, setIsOpen] = useState(false);
-
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      const params = new URLSearchParams(searchParams.toString());
-
-      if (value) {
-        params.set("q", value);
-      } else {
-        params.delete("q");
-      }
-
-      const newUrl = `/customers?${params.toString()}`;
-      const currentUrl = window.location.pathname + window.location.search;
-
-      if (newUrl !== currentUrl) {
-        router.replace(newUrl);
-      }
+      onSearch(input);
     }, 400);
 
     return () => clearTimeout(timeout);
-  }, [value]);
-
-  const handleFilter = (sortValue: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("sort", sortValue);
-
-    const newUrl = `/customers?${params.toString()}`;
-    const currentUrl = window.location.pathname + window.location.search;
-
-    if (newUrl !== currentUrl) {
-      router.replace(newUrl);
-    }
-
-    setIsOpen(false);
-  };
+  }, [input]);
 
   return (
     <div className="flex flex-col gap-5 relative">
       <div className="flex gap-3 items-center">
         <input
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
           placeholder="Search customers..."
           className="bg-neutral-100 p-4 w-full rounded-2xl outline-0"
         />
@@ -75,14 +45,17 @@ export default function SearchBar() {
       </div>
 
       {isOpen && (
-        <div className="p-5 border flex flex-col gap-2 absolute top-16 backdrop-blur-2xl right-0 border-neutral-100 rounded-2xl bg-white">
+        <div className="p-5 border flex flex-col gap-2 absolute top-16 right-0 rounded-2xl border-neutral-100 bg-white">
           {FILTERS.map((filter) => (
             <button
               key={filter.value}
-              onClick={() => handleFilter(filter.value)}
+              onClick={() => {
+                onSort(filter.value);
+                setIsOpen(false);
+              }}
               className={`text-left ${
                 currentSort === filter.value
-                  ? "font-semibold text-black"
+                  ? "font-semibold"
                   : "text-neutral-600"
               }`}
             >
