@@ -47,12 +47,12 @@ export default function LoginForm() {
     <form onSubmit={handleSubmit} className="grid gap-3">
       <input
         type="text"
-        className=" outline-0 px-3 py-4 bg-neutral-100 rounded-xl w-full "
+        className={`outline-0 px-3 py-4 rounded-xl w-ful ${formData.username ? 'bg-blue-50' : 'bg-neutral-100'}`}
         placeholder="username"
         name="username"
         onChange={handleChange}
       />
-      <div className="flex justify-between  px-3 py-4 bg-neutral-100 rounded-xl w-full ">
+      <div className={`flex justify-between  px-3 py-4  rounded-xl w-full ${formData.password ? 'bg-blue-50' : 'bg-neutral-100'}`}>
         <input
           type={showPassword ? "text" : "password"}
           name="password"
