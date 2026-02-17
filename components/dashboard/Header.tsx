@@ -1,9 +1,13 @@
 "use client";
 
 import { Settings } from "lucide-react";
+import SettingsComponent from '../settings/Settings'
 import { useSession } from "next-auth/react";
+import { useState } from "react";
 
 export default function Header() {
+  const [isOpen, setIsOpen] = useState(false);
+
   const { data: session } = useSession();
 
   return (
@@ -16,9 +20,14 @@ export default function Header() {
         </div>
       </div>
 
-      <button className="p-2 rounded-xl bg-neutral-100">
+      <button
+        className="p-2 rounded-xl bg-neutral-100"
+        onClick={() => setIsOpen((prev) => !prev)}
+      >
         <Settings color="gray" />
       </button>
+
+      {isOpen && <SettingsComponent setIsOpen={setIsOpen} />}
     </div>
   );
 }

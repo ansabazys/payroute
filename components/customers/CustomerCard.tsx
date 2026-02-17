@@ -22,7 +22,11 @@ export default function CustomerCard({ customer }: { customer: ICustomer }) {
         </p>
 
         <div className="flex gap-3">
-          <Phone size={18} className="text-neutral-600" />
+          <Phone
+            size={18}
+            className="text-neutral-600"
+            onClick={() => (window.location.href = `tel:${customer.phone}`)}
+          />
           <MapPin
             size={18}
             className="text-neutral-600 cursor-pointer"

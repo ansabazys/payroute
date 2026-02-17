@@ -10,7 +10,7 @@ export default function Header() {
   return (
     <div
       onClick={() => router.back()}
-      className="w-9 h-9 flex justify-center items-center bg-neutral-200 rounded-full"
+      className="w-9 h-9 flex justify-center items-center bg-neutral-100 rounded-full"
     >
       <ChevronLeft color="gray" />
     </div>
