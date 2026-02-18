@@ -3,6 +3,6 @@ export interface ICustomer {
   name: string;
   phone: string | number;
   pendingAmount: number;
-  location: { lat: number | null; lng: number | null };
+  location: { lat: number | null; lng: number  };
   nextDueDate?: string;
 }

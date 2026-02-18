@@ -22,8 +22,8 @@ const CustomerSchema = new mongoose.Schema(
     },
 
     location: {
-      lat: { type: Number, default: null },
-      lng: { type: Number, default: null },
+      lat: Number,
+      lng: Number,
     },
 
     totalAmount: {
