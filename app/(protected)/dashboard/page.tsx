@@ -1,7 +1,7 @@
 "use client";
 
 import ActionIcon from "@/components/dashboard/ActionIcon";
-import CustomerCard from "@/components/dashboard/CustomerCard";
+import CustomerCard from "@/components/dashboard/CustomerCard";;
 import Header from "@/components/dashboard/Header";
 import { ICustomer } from "@/types/customer";
 import {
@@ -116,8 +116,10 @@ export default function Dashboard() {
           <ActionIcon icon={<Plus />} label="Add" />
           <ActionIcon icon={<IndianRupee />} label="Payment" />
           <ActionIcon icon={<Phone />} label="Call" />
-          <ActionIcon icon={<MapPin />} label="Navigate" />
+          <ActionIcon icon={<MapPin />} label="Map" />
         </div>
+
+
 
         {/* SEARCH */}
         <div className="flex items-center bg-neutral-100 px-4 py-4 rounded-2xl">
@@ -139,7 +141,7 @@ export default function Dashboard() {
 
           {/* EMPTY SUCCESS STATE */}
           {!loading && customers.length === 0 && (
-            <div className="flex flex-col items-center justify-center mt-20 text-center">
+            <div className="flex flex-col items-center justify-center  h-full text-center">
               <p className="text-lg font-semibold">
                 🎉
                 <br /> No collections today

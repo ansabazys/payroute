@@ -1,15 +1,20 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import { Phone, MapPin, IndianRupee } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
+import { Phone, MapPin, IndianRupee, LoaderCircle, Trash2 } from "lucide-react";
 import Header from "@/components/common/Header";
 import ActionIcon from "@/components/dashboard/ActionIcon";
+import ConfimModal from "@/components/customers/ConfimModal";
 
 export default function CustomerDetailPage() {
   const { id } = useParams();
 
   const [customer, setCustomer] = useState<any>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const router = useRouter()
 
   useEffect(() => {
     fetchCustomer();
@@ -21,14 +26,50 @@ export default function CustomerDetailPage() {
     setCustomer(data);
   };
 
-  if (!customer) return <p className="p-5">Loading...</p>;
+  if (!customer)
+    return (
+      <div className="min-h-screen flex justify-center w-full items-center">
+        <LoaderCircle className="animate-spin" color="gray" />
+      </div>
+    );
 
   const isPaid = customer.pendingAmount <= 0;
+
+  const handleDelete = async () => {
+    setLoading(true);
+
+    const res = await fetch(`/api/customers/${id}`, {
+      method: "DELETE",
+    });
+
+    setLoading(false);
+
+    router.push('/customers')
+  };
 
   return (
     <div className="min-h-screen bg-neutral-100 flex justify-center">
       <div className="w-full max-w-md bg-white p-5 space-y-6">
-        <Header />
+        <div className="flex justify-between items-center">
+          <Header />
+          <button
+            className="p-2  rounded-xl bg-neutral-100"
+            onClick={() => setIsOpen((prev) => !prev)}
+          >
+            <Trash2
+              size={20}
+              className="hover:text-red-400 text-gray-400 focus:text-red-400"
+            />
+          </button>
+
+          {isOpen && (
+            <ConfimModal
+              onClose={() => setIsOpen((prev) => !prev)}
+              onConfirm={() => handleDelete()}
+              loading={loading}
+            />
+          )}
+        </div>
 
         {/* NAME */}
         <div>

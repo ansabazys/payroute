@@ -14,8 +14,8 @@ export default function CustomerCard({ customer }: { customer: ICustomer }) {
     >
       <div className="flex justify-between">
         <h3 className="font-semibold">{customer.name}</h3>
-        <span className="text-red-600 font-semibold">
-          ₹{customer.pendingAmount}
+        <span className={`${customer.pendingAmount > 0 ? 'text-red-600' : 'text-green-600'} font-semibold`}>
+          {customer.pendingAmount > 0 ? '₹' + customer.pendingAmount : 'Paid'}
         </span>
       </div>
 

@@ -22,8 +22,8 @@ const CustomerSchema = new mongoose.Schema(
     },
 
     location: {
-      lat: Number,
-      lng: Number,
+      lat: { type: Number, default: null },
+      lng: { type: Number, default: null },
     },
 
     totalAmount: {
@@ -54,8 +54,17 @@ const CustomerSchema = new mongoose.Schema(
       enum: ["monthly", "weekly", "manual"],
       default: "manual",
     },
+
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
+
+    deletedAt: {
+      type: Date,
+    },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export default mongoose.models.Customer ||

@@ -1,6 +1,6 @@
 "use client";
 
-import { Funnel, X } from "lucide-react";
+import { ListFilter, X } from "lucide-react";
 import { useState, useEffect } from "react";
 
 const FILTERS = [
@@ -42,7 +42,7 @@ export default function SearchBar({
           className="p-4 bg-neutral-100 rounded-2xl cursor-pointer"
           onClick={() => setIsOpen((prev) => !prev)}
         >
-          {isOpen ? <X color="gray" /> : <Funnel color="gray" />}
+          {isOpen ? <X color="gray" /> : <ListFilter color="gray" />}
         </div>
       </div>
 

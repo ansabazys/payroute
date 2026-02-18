@@ -78,6 +78,7 @@ export async function GET(req: NextRequest) {
 
     const filter: any = {
       ownerId: session.user.id,
+      isDeleted: false
     };
 
     // 🔍 Search
