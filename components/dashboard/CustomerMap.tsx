@@ -5,11 +5,7 @@ import maplibregl from "maplibre-gl";
 import { ICustomer } from "@/types/customer";
 
 type Props = {
-  customers: {
-    _id: string;
-    name: string;
-    location?: { lat: number; lng: number };
-  }[];
+  customers: ICustomer[]
 };
 
 export default function CustomerMap({ customers }: Props) {
