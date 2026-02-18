@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 
 export default function Dashboard() {
   const [customers, setCustomers] = useState<ICustomer[]>([]);
+  const [totalAmount, setTotalAmount] = useState<number>(0);
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState("Today's Collections");
 
@@ -29,10 +30,16 @@ export default function Dashboard() {
 
       // 1️⃣ TODAY
       let res = await fetch("/api/customers?sort=today");
-      let data = await res.json();
+      let data: ICustomer[] = await res.json();
+
+      // const response = await fetch("/api/analytics");
+      // const analytics = await response.json();
+
+      // console.log(analytics);
 
       if (data.length > 0) {
         setCustomers(data);
+        setTotalAmount(data.reduce((acc, curr) => acc + curr.pendingAmount, 0));
         setTitle("Today's Collections");
         return;
       }
@@ -43,6 +50,7 @@ export default function Dashboard() {
 
       if (data.length > 0) {
         setCustomers(data);
+        setTotalAmount(data.reduce((acc, curr) => acc + curr.pendingAmount, 0));
         setTitle("Overdue Collections");
         return;
       }
@@ -50,7 +58,6 @@ export default function Dashboard() {
       // 3️⃣ EMPTY SUCCESS STATE
       setCustomers([]);
       setTitle("No Collections");
-
     } catch (err) {
       console.error("Dashboard error:", err);
     } finally {
@@ -87,14 +94,21 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-neutral-100 flex justify-center">
       <div className="w-full max-w-md bg-white p-5 gap-5 flex flex-col h-screen">
-
         {/* HEADER */}
         <Header />
 
-        {/* SUMMARY */}
-        <div className="py-2">
-          <h1 className="text-4xl font-bold mt-2">₹18,000</h1>
-          <p className="mt-1 text-sm opacity-80">{title}</p>
+        {/* AMOUNT CARD */}
+        <div className="bg-neutral-100 rounded-3xl p-6">
+          <p className="text-sm opacity-80">{title}</p>
+
+          <h1 className="text-4xl font-bold mt-2">
+            ₹{totalAmount.toLocaleString()}
+          </h1>
+
+          <div className="flex justify-between mt-4 text-xs opacity-80">
+            <span>{customers.length} customers</span>
+            <span>Tap to view</span>
+          </div>
         </div>
 
         {/* QUICK ACTIONS */}
@@ -116,7 +130,6 @@ export default function Dashboard() {
 
         {/* LIST AREA */}
         <div className="space-y-4 overflow-y-auto flex-1 pb-15">
-
           {/* LOADING */}
           {loading && (
             <div className="flex justify-center items-center h-full">
@@ -127,7 +140,10 @@ export default function Dashboard() {
           {/* EMPTY SUCCESS STATE */}
           {!loading && customers.length === 0 && (
             <div className="flex flex-col items-center justify-center mt-20 text-center">
-              <p className="text-lg font-semibold">🎉<br /> No collections today</p>
+              <p className="text-lg font-semibold">
+                🎉
+                <br /> No collections today
+              </p>
               <p className="text-sm text-neutral-500">
                 All customers are up to date
               </p>

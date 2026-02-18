@@ -1,5 +1,8 @@
+"use client";
+
 import { ICustomer } from "@/types/customer";
 import { IndianRupee, MapPin, Phone } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function CustomerCard({
   customer,
@@ -8,8 +11,12 @@ export default function CustomerCard({
   customer: ICustomer;
   status: { label: string; color: string };
 }) {
+  const router = useRouter();
   return (
-    <div className="bg-white rounded-2xl p-4 space-y-1 border border-neutral-100">
+    <div
+      className="bg-white rounded-2xl p-4 space-y-1 border border-neutral-100"
+      onClick={() => router.push(`/customers/${customer._id}`)}
+    >
       <div className="flex justify-between">
         <h3 className="font-semibold">{customer.name}</h3>
         <span className="text-yellow-600 font-semibold">
@@ -36,8 +43,7 @@ export default function CustomerCard({
           <Phone
             size={18}
             className="text-neutral-600"
-           onClick={() => window.location.href = `tel:${customer.phone}`}
-
+            onClick={() => (window.location.href = `tel:${customer.phone}`)}
           />
           <MapPin
             size={18}

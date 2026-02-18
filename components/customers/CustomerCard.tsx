@@ -2,10 +2,16 @@
 
 import { ICustomer } from "@/types/customer";
 import { IndianRupee, MapPin, Phone } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function CustomerCard({ customer }: { customer: ICustomer }) {
+  const router = useRouter();
+
   return (
-    <div className="bg-white rounded-2xl p-4 space-y-2 border border-neutral-100">
+    <div
+      className="bg-white rounded-2xl p-4 space-y-2 border border-neutral-100"
+      onClick={() => router.push(`/customers/${customer._id}`)}
+    >
       <div className="flex justify-between">
         <h3 className="font-semibold">{customer.name}</h3>
         <span className="text-red-600 font-semibold">
