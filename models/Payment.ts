@@ -19,14 +19,12 @@ const PaymentSchema = new mongoose.Schema(
       required: true,
     },
 
-    collectedBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+    date: {
+      type: Date,
+      default: Date.now,
     },
 
-    note: {
-      type: String,
-    },
+    notes: String,
   },
   { timestamps: true }
 );

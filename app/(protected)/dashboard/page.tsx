@@ -1,7 +1,7 @@
 "use client";
 
 import ActionIcon from "@/components/dashboard/ActionIcon";
-import CustomerCard from "@/components/dashboard/CustomerCard";;
+import CustomerCard from "@/components/dashboard/CustomerCard";
 import Header from "@/components/dashboard/Header";
 import { ICustomer } from "@/types/customer";
 import {
@@ -113,13 +113,11 @@ export default function Dashboard() {
 
         {/* QUICK ACTIONS */}
         <div className="grid grid-cols-4 gap-4">
-          <ActionIcon icon={<Plus />} label="Add" />
-          <ActionIcon icon={<IndianRupee />} label="Payment" />
-          <ActionIcon icon={<Phone />} label="Call" />
-          <ActionIcon icon={<MapPin />} label="Map" />
+          <ActionIcon icon={<Plus />} label="Add" link={"customer/add"} />
+          <ActionIcon icon={<IndianRupee />} label="Payment" link={"payments"} />
+          <ActionIcon icon={<Phone />} label="Call" link={"dashboard"} />
+          <ActionIcon icon={<MapPin />} label="Map" link={"map"} />
         </div>
-
-
 
         {/* SEARCH */}
         <div className="flex items-center bg-neutral-100 px-4 py-4 rounded-2xl">

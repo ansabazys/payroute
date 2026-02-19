@@ -3,12 +3,14 @@
 import { LoaderCircle } from "lucide-react";
 
 type Props = {
+  title: string,
+  paragraph: string,
   loading: boolean;
   onClose: () => void;
   onConfirm: () => void;
 };
 
-export default function ConfirmModal({ loading, onClose, onConfirm }: Props) {
+export default function ConfirmModal({ title, paragraph, loading, onClose, onConfirm }: Props) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* BACKDROP */}
@@ -20,12 +22,11 @@ export default function ConfirmModal({ loading, onClose, onConfirm }: Props) {
       {/* MODAL */}
       <div className="relative bg-white w-full max-w-xs mx-4 rounded-2xl p-6  animate-in fade-in zoom-in-95">
         {/* TITLE */}
-        <h2 className="text-lg font-semibold">Delete customer?</h2>
+        <h2 className="text-lg font-semibold">{title}</h2>
 
         {/* DESCRIPTION */}
         <p className="text-sm text-neutral-500 mt-2">
-          This action cannot be undone. The customer and payment history will be
-          permanently removed.
+          {paragraph}
         </p>
 
         {/* ACTIONS */}
