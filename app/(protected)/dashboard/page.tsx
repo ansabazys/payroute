@@ -113,7 +113,7 @@ export default function Dashboard() {
 
         {/* QUICK ACTIONS */}
         <div className="grid grid-cols-4 gap-4">
-          <ActionIcon icon={<Plus />} label="Add" link={"customer/add"} />
+          <ActionIcon icon={<Plus />} label="Add" link={"customers/add"} />
           <ActionIcon icon={<IndianRupee />} label="Payment" link={"payments"} />
           <ActionIcon icon={<Phone />} label="Call" link={"dashboard"} />
           <ActionIcon icon={<MapPin />} label="Map" link={"map"} />

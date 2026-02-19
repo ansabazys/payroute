@@ -2,7 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Phone, MapPin, IndianRupee, LoaderCircle, Trash2 } from "lucide-react";
+import {
+  Phone,
+  IndianRupee,
+  LoaderCircle,
+  Trash2,
+  Navigation,
+  Edit,
+  UserRoundPen,
+} from "lucide-react";
 import Header from "@/components/common/Header";
 import ActionIcon from "@/components/dashboard/ActionIcon";
 import ConfimModal from "@/components/customers/ConfimModal";
@@ -60,20 +68,38 @@ export default function CustomerDetailPage() {
     router.push("/customers");
   };
 
+  const handleNavigate = () => {
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${customer.location?.lat},${customer.location?.lng}`;
+    window.open(url, "_blank");
+  };
+
   return (
-    <div className="min-h-screen bg-neutral-100 flex justify-center">
+    <div className="min-h-screen flex justify-center pb-20">
       <div className="w-full max-w-md bg-white p-5 space-y-6">
         <div className="flex justify-between items-center">
           <Header />
-          <button
-            className="p-2  rounded-xl bg-neutral-100"
-            onClick={() => setIsOpen((prev) => !prev)}
-          >
-            <Trash2
-              size={20}
-              className="hover:text-red-400 text-gray-400 focus:text-red-400"
-            />
-          </button>
+
+          <div className="flex gap-2">
+            <button
+              onClick={() => router.push(`/customers/edit/${customer._id}`)}
+              className="p-2  rounded-xl bg-neutral-100"
+            >
+              <UserRoundPen
+                size={20}
+                className="hover:text-red-400 text-gray-400 focus:text-red-400"
+              />
+            </button>
+
+            <button
+              className="p-2  rounded-xl bg-neutral-100"
+              onClick={() => setIsOpen((prev) => !prev)}
+            >
+              <Trash2
+                size={20}
+                className="hover:text-red-400 text-gray-400 focus:text-red-400"
+              />
+            </button>
+          </div>
 
           {isOpen && (
             <ConfimModal
@@ -117,7 +143,15 @@ export default function CustomerDetailPage() {
             link={`payments/add/${customer._id}`}
           />
           <ActionIcon icon={<Phone />} label="Call" link={"/"} />
-          <ActionIcon icon={<MapPin />} label="Navigate" link={"/"} />
+          <div
+            className="flex flex-col items-center gap-1"
+            onClick={handleNavigate}
+          >
+            <div className=" py-3 gap-2 w-full flex-col text-blue-600 rounded-2xl flex items-center justify-center border border-neutral-100">
+              <Navigation />
+              <span className="text-xs text-neutral-600">Navigate</span>
+            </div>
+          </div>
         </div>
 
         {/* DETAILS */}
